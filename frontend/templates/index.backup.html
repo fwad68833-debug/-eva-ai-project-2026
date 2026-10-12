@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050505">
+<title>EVA | The Pharaoh Protocol</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --gold:#d9b568;
+  --gold-light:#ffe6a0;
+  --blue:#62d9ff;
+  --bg:#050505;
+  --panel:rgba(17,17,17,.82);
+  --muted:#89857b;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;background:var(--bg);color:#f5f0e5;
+  font-family:'Cairo',sans-serif;overflow-x:hidden
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;
+  background:
+  radial-gradient(ellipse at 50% 25%,rgba(166,119,40,.13),transparent 44%),
+  radial-gradient(ellipse at 90% 90%,rgba(0,160,220,.08),transparent 40%),
+  linear-gradient(135deg,#030303,#0b0b0b 50%,#030303)
+}
+body:after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:5;opacity:.11;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E")
+}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:1px solid var(--gold)}
+.hidden{display:none!important}
+.topline{
+  height:3px;background:linear-gradient(90deg,transparent,var(--gold),var(--blue),var(--gold),transparent);
+  box-shadow:0 0 18px #d9b56866
+}
+header{
+  height:72px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 6%;border-bottom:1px solid #d9b56824;background:#080808b8;
+  backdrop-filter:blur(16px)
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:39px;height:39px;border:1px solid #d9b56888;color:var(--gold);
+  display:grid;place-items:center;transform:rotate(45deg);box-shadow:0 0 22px #d9b56812
+}
+.brand-mark span{transform:rotate(-45deg);font-size:21px}
+.brand-name{font-size:18px;font-weight:800;letter-spacing:3px}
+.brand-sub{font-size:9px;letter-spacing:2.2px;color:var(--muted);direction:ltr}
+.status{font-size:11px;color:#aaa;display:flex;gap:9px;align-items:center}
+.dot{width:7px;height:7px;background:#62e6ad;border-radius:50%;box-shadow:0 0 10px #62e6ad}
+main{max-width:1100px;margin:auto;padding:34px 22px 60px}
+.eyebrow{
+  color:var(--gold);font-size:10px;letter-spacing:3px;text-align:center;
+  direction:ltr;margin:10px 0 20px
+}
+.hero{text-align:center;position:relative;padding:5px 0 28px}
+.hero h1{
+  font-size:clamp(30px,6vw,56px);line-height:1.3;margin:0;
+  font-weight:700;letter-spacing:-1px
+}
+.hero h1 span{
+  color:var(--gold-light);text-shadow:0 0 30px #d9b5682b
+}
+.hero p{color:#a6a096;font-size:13px;line-height:2;margin:12px auto;max-width:460px}
+.art-stage{
+  width:min(340px,85vw);height:300px;margin:4px auto 10px;position:relative;
+  display:grid;place-items:center
+}
+.sun{
+  position:absolute;width:190px;height:190px;border:1px solid #d9b5685c;
+  border-radius:50%;box-shadow:0 0 55px #d9b56810,inset 0 0 40px #d9b5680b
+}
+.sun:before,.sun:after{
+  content:"";position:absolute;inset:13px;border:1px solid #d9b56824;border-radius:50%
+}
+.sun:after{inset:-13px;border-style:dashed;animation:spin 90s linear infinite}
+.ray{
+  position:absolute;width:2px;height:30px;background:linear-gradient(transparent,var(--gold));
+  transform-origin:50% 150px;top:0;left:calc(50% - 1px);opacity:.65
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.avatar{
+  position:relative;width:170px;height:200px;filter:drop-shadow(0 0 24px #00c8ff19);
+  animation:float 5s ease-in-out infinite
+}
+@keyframes float{50%{transform:translateY(-7px)}}
+.corner{position:absolute;width:32px;height:32px;border-color:#d9b56877}
+.c1{top:20px;right:15px;border-top:1px solid;border-right:1px solid}
+.c2{top:20px;left:15px;border-top:1px solid;border-left:1px solid}
+.c3{bottom:20px;right:15px;border-bottom:1px solid;border-right:1px solid}
+.c4{bottom:20px;left:15px;border-bottom:1px solid;border-left:1px solid}
+.intro-card{
+  width:min(440px,100%);margin:20px auto 0;padding:25px;
+  background:linear-gradient(145deg,#12110eeb,#08090bed);
+  border:1px solid #d9b5684d;position:relative;
+  box-shadow:0 20px 70px #0009,inset 0 0 35px #d9b56807
+}
+.intro-card:before{
+  content:"";position:absolute;top:-1px;left:25%;right:25%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold-light),transparent)
+}
+.card-label{font-size:11px;color:#b7a77f;margin-bottom:12px}
+.name-input{
+  width:100%;padding:14px 15px;background:#050505;border:1px solid #363127;
+  color:white;border-radius:2px;outline:none
+}
+.name-input:focus{border-color:var(--gold);box-shadow:0 0 15px #d9b56812}
+.primary{
+  width:100%;margin-top:13px;padding:13px;border:1px solid var(--gold);
+  background:linear-gradient(100deg,#8c682b,#e2c47c,#9c7835);
+  color:#100d07;font-weight:800;transition:.2s
+}
+.primary:hover{filter:brightness(1.15);box-shadow:0 0 25px #d9b56824}
+.micro{font-size:10px;color:#716d64;text-align:center;margin-top:13px}
+.chat-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;min-height:570px}
+.sidebar,.chat-panel{
+  background:#0b0b0bdc;border:1px solid #d9b5682a;
+  box-shadow:0 15px 55px #0007
+}
+.sidebar{padding:19px 15px}
+.side-title{font-size:10px;letter-spacing:2px;color:var(--gold);direction:ltr;text-align:left}
+.side-line{height:1px;background:#d9b56824;margin:16px 0}
+.side-btn{
+  display:block;width:100%;text-align:right;background:transparent;color:#c3beb2;
+  border:1px solid transparent;padding:11px 10px;font-size:12px;margin-bottom:5px
+}
+.side-btn:hover{border-color:#d9b56838;background:#d9b56808}
+.side-note{font-size:10px;color:#706b61;line-height:2;margin-top:22px}
+.chat-panel{display:flex;flex-direction:column;min-height:570px}
+.chat-head{
+  padding:14px 18px;display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid #d9b56824;background:#11100dd9
+}
+.mini-avatar{
+  width:43px;height:43px;border:1px solid #d9b56877;border-radius:50%;
+  display:grid;place-items:center;background:radial-gradient(circle,#19323a,#080808 70%)
+}
+.mini-avatar svg{width:28px;height:33px}
+.chat-title{font-size:13px;font-weight:700}
+.chat-sub{font-size:10px;color:#8b8578}
+.chat-tools{margin-right:auto;display:flex;gap:7px}
+.tool{
+  width:32px;height:32px;color:#b9aa83;background:#111;border:1px solid #383125
+}
+.messages{
+  flex:1;padding:22px 17px;display:flex;flex-direction:column;gap:19px;
+  overflow:auto;max-height:490px;min-height:350px
+}
+.welcome-msg{text-align:center;padding:25px 0;color:#a59d8c}
+.welcome-msg .symbol{font-size:28px;color:var(--gold)}
+.welcome-msg h3{font-size:18px;color:#eee7d7;margin:10px 0}
+.welcome-msg p{font-size:11px;line-height:2;color:#8e887d}
+.msg{display:flex;gap:10px;align-items:flex-start;max-width:95%}
+.msg.user{align-self:flex-start;flex-direction:row-reverse}
+.msg.eva{align-self:flex-end}
+.msg-avatar{
+  flex:0 0 34px;width:34px;height:34px;border:1px solid #d9b56865;
+  display:grid;place-items:center;color:var(--gold);font-size:12px;background:#100f0c
+}
+.msg-avatar img{width:30px;height:30px;object-fit:contain}
+.bubble{padding:12px 14px;font-size:12px;line-height:2;white-space:pre-wrap;overflow-wrap:anywhere}
+.eva .bubble{background:#15130f;border:1px solid #76603952;border-radius:2px 12px 12px 12px}
+.user .bubble{background:#10212a;border:1px solid #33758a6b;border-radius:12px 2px 12px 12px}
+.composer-wrap{padding:13px 15px 16px;border-top:1px solid #d9b56824}
+.composer{
+  display:flex;align-items:flex-end;gap:9px;padding:8px;background:#050505;
+  border:1px solid #403827
+}
+.composer:focus-within{border-color:#a98b4f}
+#messageInput{
+  flex:1;min-width:0;max-height:120px;resize:vertical;background:transparent;
+  color:#f5f0e5;border:0;outline:none;padding:7px;font-size:12px
+}
+.send{
+  width:39px;height:39px;border:1px solid #d9b568;background:var(--gold);
+  color:#090806;font-size:18px
+}
+.composer-hint{font-size:9px;color:#666156;text-align:center;margin-top:9px}
+.modal-bg{
+  position:fixed;inset:0;background:#000c;z-index:10;display:grid;place-items:center;padding:20px
+}
+.modal{
+  width:min(400px,100%);background:#0d0c0a;border:1px solid #d9b56866;
+  padding:24px;box-shadow:0 0 70px #000
+}
+.modal h3{margin-top:0;color:var(--gold)}
+.modal p{font-size:12px;color:#aaa;line-height:2}
+footer{text-align:center;color:#514d44;font-size:9px;letter-spacing:2px;margin-top:32px;direction:ltr}
+@media(max-width:700px){
+  header{padding:0 17px;height:62px}
+  main{padding:22px 13px 35px}
+  .hero h1{font-size:32px}
+  .art-stage{height:265px}
+  .chat-layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .chat-panel{min-height:65vh}
+  .messages{min-height:40vh}
+  .intro-card{padding:20px}
+}
+</style>
+</head>
+<body>
+<div class="topline"></div>
+<header>
+  <div class="brand">
+    <div class="brand-mark"><span>𓂀</span></div>
+    <div><div class="brand-name">E V A</div><div class="brand-sub">PHARAOH PROTOCOL</div></div>
+  </div>
+  <div class="status"><span class="dot"></span><span id="statusText">النظام جاهز</span></div>
+</header>
+
+<main>
+<section id="welcome">
+  <div class="eyebrow">ANCIENT WISDOM · FUTURE INTELLIGENCE</div>
+  <div class="hero">
+    <h1>ما وراء الزمن،<br><span>تبدأ إيفا.</span></h1>
+    <p>ذكاء اصطناعي بطابع مصري أصيل، صُمم ليكون مساحة خاصة لأفكارك وحواراتك.</p>
+    <div class="art-stage">
+      <div class="sun"></div>
+      <span class="ray" style="transform:rotate(0deg)"></span>
+      <span class="ray" style="transform:rotate(30deg)"></span>
+      <span class="ray" style="transform:rotate(60deg)"></span>
+      <span class="ray" style="transform:rotate(90deg)"></span>
+      <span class="ray" style="transform:rotate(120deg)"></span>
+      <span class="ray" style="transform:rotate(150deg)"></span>
+      <span class="ray" style="transform:rotate(180deg)"></span>
+      <span class="ray" style="transform:rotate(210deg)"></span>
+      <span class="ray" style="transform:rotate(240deg)"></span>
+      <span class="ray" style="transform:rotate(270deg)"></span>
+      <span class="ray" style="transform:rotate(300deg)"></span>
+      <span class="ray" style="transform:rotate(330deg)"></span>
+      <i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
+      <svg class="avatar" viewBox="0 0 170 200" role="img" aria-label="رمز إيفا">
+        <defs>
+          <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#fff1c4"/><stop offset=".38" stop-color="#a88a4b"/>
+            <stop offset=".72" stop-color="#29261e"/><stop offset="1" stop-color="#d7b66a"/>
+          </linearGradient>
+          <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="#193e4a"/><stop offset="1" stop-color="#03090d"/>
+          </linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <path d="M85 7 L105 20 120 44 115 59 130 72 120 91 112 98 109 130 95 150 85 159 75 150 61 130 58 98 50 91 40 72 55 59 50 44 65 20Z" fill="#0a0d0e" stroke="url(#metal)" stroke-width="2"/>
+        <path d="M85 15 L100 27 109 47 101 63 114 74 105 88 95 94 96 124 85 143 74 124 75 94 65 88 56 74 69 63 61 47 70 27Z" fill="url(#glass)" stroke="#9d8145" stroke-width="1.2"/>
+        <path d="M57 53 L71 63 85 67 99 63 113 53 108 72 99 83 85 88 71 83 62 72Z" fill="#090b0c" stroke="#c6a85f" stroke-width="1.5"/>
+        <path d="M68 68 L81 72 78 78 67 77Z M102 68 L89 72 92 78 103 77Z" fill="#64e5ff" filter="url(#glow)"/>
+        <path d="M85 90 L80 111 85 118 90 111Z" fill="#d5b46a"/>
+        <path d="M63 99 L73 120 85 130 97 120 107 99" fill="none" stroke="#8c7441" stroke-width="2"/>
+        <path d="M60 33 L85 21 110 33 M52 45 L62 40 M118 45 L108 40" fill="none" stroke="#d7b66a" stroke-width="2"/>
+        <path d="M68 139 L60 154 67 178 85 190 103 178 110 154 102 139" fill="#0a0d0e" stroke="url(#metal)" stroke-width="2"/>
+        <path d="M72 148 L85 158 98 148 94 174 85 181 76 174Z" fill="#112a31" stroke="#59d8f7" stroke-width="1.5"/>
+        <circle cx="85" cy="166" r="4" fill="#62d9ff" filter="url(#glow)"/>
+        <path d="M50 65 L36 83 46 101 M120 65 L134 83 124 101" fill="none" stroke="#b99a56" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+  <div class="intro-card">
+    <div class="card-label">𓋹 &nbsp; ابدأ رحلتك مع إيفا</div>
+    <input id="nameInput" class="name-input" maxlength="40" placeholder="اكتب اسمك هنا..." autocomplete="nickname">
+    <button class="primary" id="startBtn">دخول إلى عالم إيفا &nbsp; ←</button>
+    <div class="micro">واجهة تجريبية مستقلة · PHARAOH AI</div>
+  </div>
+</section>
+
+<section id="chat" class="hidden">
+  <div class="eyebrow">YOUR PRIVATE INTELLIGENCE SPACE</div>
+  <div class="chat-layout">
+    <aside class="sidebar">
+      <div class="side-title">EVA / CONTROL</div>
+      <div class="side-line"></div>
+      <button class="side-btn" id="newChat">＋ محادثة جديدة</button>
+      <button class="side-btn" id="historyBtn">◷ سجل المحادثة</button>
+      <button class="side-btn" id="memoryBtn">𓂀 ذاكرة إيفا</button>
+      <button class="side-btn" id="settingsBtn">⚙ الإعدادات</button>
+      <div class="side-line"></div>
+      <div class="side-note">« لكل عصر حكمته، ولكل سؤال بداية. »<br><br>هذه الواجهة مستقلة عن سيرفر الرد التلقائي الأصلي.</div>
+    </aside>
+    <section class="chat-panel">
+      <div class="chat-head">
+        <div class="mini-avatar">
+          <svg viewBox="0 0 50 60" aria-hidden="true"><path d="M25 3L38 14 42 31 35 42 25 51 15 42 8 31 12 14Z" fill="#101c20" stroke="#d9b568" stroke-width="1.5"/><path d="M13 24L22 28 20 32 12 30ZM37 24L28 28 30 32 38 30Z" fill="#62d9ff"/><path d="M25 34L21 43 25 46 29 43Z" fill="#d9b568"/></svg>
+        </div>
+        <div><div class="chat-title">إيفا <span style="color:#d9b568">𓂀</span></div><div class="chat-sub">المساعد الذكي · <span id="userLabel">ضيف</span></div></div>
+        <div class="chat-tools"><button class="tool" id="settingsTop" title="الإعدادات">⚙</button></div>
+      </div>
+      <div class="messages" id="messages">
+        <div class="welcome-msg" id="emptyState">
+          <div class="symbol">𓂀</div>
+          <h3>أهلًا بيك في عالم إيفا</h3>
+          <p>اكتب أول رسالة، وابدأ محادثتك.<br>الواجهة جاهزة، وربط الذكاء الاصطناعي خطوة منفصلة.</p>
+        </div>
+      </div>
+      <div class="composer-wrap">
+        <div class="composer">
+          <textarea id="messageInput" rows="1" placeholder="اكتب رسالتك لإيفا..."></textarea>
+          <button class="send" id="sendBtn" aria-label="إرسال">↑</button>
+        </div>
+        <div class="composer-hint">ENTER للإرسال · SHIFT + ENTER لسطر جديد</div>
+      </div>
+    </section>
+  </div>
+</section>
+<footer>EVA · PHARAOH PROTOCOL · DESIGNED FOR THE NEXT ERA</footer>
+</main>
+
+<div id="modalBg" class="modal-bg hidden">
+  <div class="modal">
+    <h3 id="modalTitle">الإعدادات</h3>
+    <p id="modalText"></p>
+    <button class="primary" id="closeModal">إغلاق</button>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let userName=localStorage.getItem('eva_ui_name')||'';
+let messages=JSON.parse(localStorage.getItem('eva_ui_history')||'[]');
+
+function showChat(){
+  $('welcome').classList.add('hidden');
+  $('chat').classList.remove('hidden');
+  $('userLabel').textContent=userName||'ضيف';
+  $('statusText').textContent='الواجهة نشطة';
+  drawMessages();
+}
+function start(){
+  const n=$('nameInput').value.trim();
+  if(!n){$('nameInput').focus();return}
+  userName=n;
+  localStorage.setItem('eva_ui_name',n);
+  showChat();
+}
+$('startBtn').addEventListener('click',start);
+$('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')start()});
+
+function drawMessages(){
+  const box=$('messages');box.innerHTML='';
+  if(!messages.length){
+    box.innerHTML='<div class="welcome-msg"><div class="symbol">𓂀</div><h3>أهلًا بيك يا '+esc(userName)+'</h3><p>اكتب أول رسالة، وابدأ محادثتك.</p></div>';
+    return;
+  }
+  messages.forEach(m=>{
+    const row=document.createElement('div');
+    row.className='msg '+(m.role==='user'?'user':'eva');
+    const av=m.role==='user'?'<div class="msg-avatar">أنت</div>':'<div class="msg-avatar"><img src="/static/eva.svg" alt="إيفا" onerror="this.parentElement.textContent=\'𓂀\'"></div>';
+    row.innerHTML=av+'<div class="bubble"></div>';
+    row.querySelector('.bubble').textContent=m.text;
+    box.appendChild(row);
+  });
+  box.scrollTop=box.scrollHeight;
+}
+function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function send(){
+  const input=$('messageInput'),text=input.value.trim();
+  if(!text)return;
+  messages.push({role:'user',text});
+  localStorage.setItem('eva_ui_history',JSON.stringify(messages));
+  input.value='';drawMessages();
+  messages.push({role:'eva',text:'الواجهة بتستقبل رسالتك، لكن ربطها بموديل Groq لسه مش متوصل. ده مش رد من الذكاء الاصطناعي الحقيقي.'});
+  localStorage.setItem('eva_ui_history',JSON.stringify(messages));
+  drawMessages();
+}
+$('sendBtn').addEventListener('click',send);
+$('messageInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+$('newChat').addEventListener('click',()=>{messages=[];localStorage.setItem('eva_ui_history','[]');drawMessages()});
+function modal(title,text){$('modalTitle').textContent=title;$('modalText').textContent=text;$('modalBg').classList.remove('hidden')}
+$('settingsBtn').addEventListener('click',()=>modal('الإعدادات','اسمك: '+(userName||'غير محدد')+' — دي واجهة مستقلة. إعدادات Groq والسيرفر الأصلي لم يتم تغييرها.'));
+$('settingsTop').addEventListener('click',()=>modal('الإعدادات','اسمك: '+(userName||'غير محدد')+' — دي واجهة مستقلة. إعدادات Groq والسيرفر الأصلي لم يتم تغييرها.'));
+$('historyBtn').addEventListener('click',()=>modal('سجل المحادثة','عدد الرسائل المحفوظة على هذا الجهاز: '+messages.length));
+$('memoryBtn').addEventListener('click',()=>modal('ذاكرة إيفا','الاسم المحفوظ: '+(userName||'لا يوجد')+' — الذاكرة هنا محلية على نفس الجهاز.'));
+$('closeModal').addEventListener('click',()=>$('modalBg').classList.add('hidden'));
+$('modalBg').addEventListener('click',e=>{if(e.target===$('modalBg'))$('modalBg').classList.add('hidden')});
+if(userName){$('nameInput').value=userName}
+</script>
+</body>
+</html>

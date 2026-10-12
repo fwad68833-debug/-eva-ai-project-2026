@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#030712">
+<title>EVA AI | إيفا</title>
+<style>
+:root{--bg:#030712;--panel:#0a1424;--line:#1b3b55;--cyan:#55ddff;--text:#edfaff;--muted:#8aa6b8}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#10283c 0%,#030712 60%);color:var(--text);font-family:system-ui,"Segoe UI",sans-serif;min-height:100vh;padding-bottom:92px}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:15px 18px;background:#030712eF;border-bottom:1px solid #55ddff30;backdrop-filter:blur(16px)}
+.logo{font-weight:900;letter-spacing:4px;color:var(--cyan);text-shadow:0 0 18px #55ddff66}
+.status{font-size:11px;color:#7fe7bd}
+main{width:min(850px,100%);margin:auto;padding:18px}
+.page{display:none;animation:appear .25s ease}
+.page.active{display:block}
+@keyframes appear{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+h1{font-size:clamp(27px,7vw,42px);margin:8px 0}
+h2{font-size:22px;margin:5px 0 14px}
+p{color:var(--muted);line-height:1.8}
+.eyebrow{color:var(--cyan);font-size:10px;letter-spacing:3px}
+.panel{background:linear-gradient(145deg,#0b1b2b,#07101c);border:1px solid var(--line);border-radius:20px;padding:17px;margin:14px 0;box-shadow:0 12px 35px #0003}
+.preview{display:block;width:100%;height:auto;border-radius:15px;border:1px solid #55ddff44;margin:15px auto;max-height:55vh;object-fit:contain;background:#030712}
+.btn{border:1px solid #55ddff77;border-radius:12px;background:#0c2b3c;color:var(--cyan);padding:12px 16px;font:inherit;cursor:pointer}
+.btn.primary{background:linear-gradient(100deg,#0e6d91,#164b77);color:white;width:100%;font-weight:700}
+.field{width:100%;padding:13px;background:#030b15;color:white;border:1px solid var(--line);border-radius:12px;font:inherit;outline:none;margin:6px 0}
+.row{display:flex;gap:8px;align-items:center}
+.row .field{flex:1;min-width:0}
+#messages{display:flex;flex-direction:column;gap:10px;min-height:100px;max-height:42vh;overflow:auto}
+.msg{padding:11px 13px;border-radius:14px;max-width:90%;line-height:1.7;white-space:pre-wrap}
+.msg.eva{align-self:flex-start;background:#0b2637;border:1px solid #55ddff33}
+.msg.user{align-self:flex-end;background:#123d57}
+.small{font-size:12px;color:var(--muted)}
+.item{padding:12px 0;border-bottom:1px solid #1b3b554f}
+.item:last-child{border:0}
+textarea.field{resize:vertical}
+.switchrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #1b3b554f}
+nav{position:fixed;z-index:10;bottom:0;left:0;right:0;padding:9px 5px calc(9px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;gap:4px;background:#050c17f5;border-top:1px solid #55ddff33;backdrop-filter:blur(18px)}
+nav button{flex:1;min-width:0;border:0;background:transparent;color:#829daf;border-radius:12px;padding:9px 2px;font-size:11px;font-family:inherit;cursor:pointer}
+nav button span{display:block;font-size:19px;margin-bottom:4px}
+nav button.active{color:var(--cyan);background:#123348;box-shadow:inset 0 0 0 1px #55ddff30}
+.hidden{display:none!important}
+footer{text-align:center;color:#587387;font-size:10px;padding:24px 0}
+
+/* EVA FULL SCREEN CHAT */
+body.chat-mode{padding:0;min-height:100dvh;overflow:hidden;background:#030712}
+body.chat-mode>header,body.chat-mode>nav,body.chat-mode>main>footer{display:none}
+body.chat-mode main{width:100%;max-width:none;margin:0;padding:0}
+body.chat-mode main>.page:not(#chat){display:none!important}
+body.chat-mode #chat.active{
+ position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;
+ width:100%;height:100vh;height:100dvh;margin:0;padding:0;
+ background:radial-gradient(ellipse at top,#10283c 0%,#030712 65%);
+ overflow:hidden;animation:none
+}
+.chat-topbar{
+ flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+ padding:calc(12px + env(safe-area-inset-top)) 15px 12px;
+ border-bottom:1px solid #55ddff30;background:#030712eF
+}
+.chat-topbar .chat-brand{color:var(--cyan);font-weight:900;letter-spacing:2px}
+.chat-back{border:1px solid #55ddff55;border-radius:11px;background:#0c2b3c;
+ color:var(--cyan);padding:9px 13px;font:inherit}
+body.chat-mode #chat>.eyebrow,
+body.chat-mode #chat>h1,
+body.chat-mode #chat>img{display:none!important}
+body.chat-mode #chat>.panel{
+ flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;
+ margin:0;padding:12px 12px calc(10px + env(safe-area-inset-bottom));
+ border:0;border-radius:0;box-shadow:none;background:transparent
+}
+body.chat-mode #chat .panel>.small{flex-shrink:0}
+body.chat-mode #messages{
+ flex:1;min-height:0;max-height:none;overflow-y:auto;
+ overscroll-behavior:contain;padding:4px 2px
+}
+body.chat-mode #chat .row{flex-shrink:0;gap:8px}
+body.chat-mode #chat .row .field{margin:0;min-height:48px}
+body.chat-mode #chat #send{min-height:48px}
+body.chat-mode #chat #clearChat{flex-shrink:0;align-self:flex-start;padding:7px 12px}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">E V A <span>𓂀</span></div>
+  <div class="status">● واجهة إيفا</div>
+</header>
+
+<main>
+<section class="page active" id="home">
+  <div class="eyebrow">PERSONAL AI SPACE</div>
+  <h1>أهلًا بيك في <span style="color:var(--cyan)">إيفا</span></h1>
+  <p>مساحتك الذكية — بتصميم مستقبلي مستوحى من التكنولوجيا المصرية.</p>
+  <img class="preview" src="/static/images/screen1.png" alt="تصميم الرئيسية">
+  <div class="panel">
+    <h2>نبدأ؟</h2>
+    <label for="username">اكتب اسمك</label>
+    <input class="field" id="username" maxlength="40" placeholder="اسمك هنا" autocomplete="nickname">
+    <button class="btn primary" id="startChat">دخول للمحادثة ←</button>
+  </div>
+</section>
+
+<section class="page" id="chat">
+  <div class="chat-topbar">
+    <button class="chat-back" id="exitChat">← رجوع</button>
+    <div class="chat-brand">E V A 𓂀</div>
+    <div class="status">● متصلة</div>
+  </div>
+  <div class="eyebrow">EVA CONVERSATION</div>
+  <h1>المحادثة</h1>
+  <img class="preview" src="/static/images/screen2.png" alt="تصميم المحادثة">
+  <div class="panel">
+    <div class="small">إيفا · نموذج واجهة</div>
+    <div id="messages" aria-live="polite">
+      <div class="msg eva">أهلًا بيك! أنا إيفا ✨ الواجهة جاهزة، لكن ربط الذكاء الاصطناعي لسه محتاج خطوة منفصلة.</div>
+    </div>
+    <div class="row">
+      <input class="field" id="message" placeholder="اكتب رسالتك..." autocomplete="off">
+      <button class="btn" id="send">إرسال</button>
+    </div>
+    <button class="btn" id="clearChat">محادثة جديدة</button>
+  </div>
+</section>
+
+<section class="page" id="files">
+  <div class="eyebrow">YOUR FILE SPACE</div>
+  <h1>الملفات</h1>
+  <img class="preview" src="/static/images/screen3.png" alt="تصميم الملفات">
+  <div class="panel">
+    <h2>ملفات الجهاز</h2>
+    <p>اختار ملفًا لعرض اسمه هنا. الرفع للسيرفر مش مفعّل في النسخة الحالية.</p>
+    <input class="field" type="file" id="filePicker">
+    <div id="fileName" class="small">لم يتم اختيار ملف.</div>
+  </div>
+</section>
+
+<section class="page" id="memory">
+  <div class="eyebrow">PERSONAL MEMORY</div>
+  <h1>الذاكرة</h1>
+  <img class="preview" src="/static/images/screen4.png" alt="تصميم الذاكرة">
+  <div class="panel">
+    <h2>ملاحظة محلية</h2>
+    <p>اكتب ملاحظة مؤقتة للعرض داخل الصفحة. لن تُحفظ بعد إغلاقها.</p>
+    <textarea class="field" id="memoryText" rows="4" placeholder="اكتب ملاحظتك..."></textarea>
+    <button class="btn" id="saveMemory">عرض الملاحظة</button>
+    <div id="memoryOutput" class="item"></div>
+  </div>
+</section>
+
+<section class="page" id="settings">
+  <div class="eyebrow">SYSTEM PREFERENCES</div>
+  <h1>الإعدادات</h1>
+  <img class="preview" src="/static/images/screen5.png" alt="تصميم الإعدادات">
+  <div class="panel">
+    <h2>تفضيلات الواجهة</h2>
+    <div class="switchrow"><span>المؤثرات الحركية</span><input type="checkbox" id="motion" checked></div>
+    <div class="switchrow"><span>صوت الإشعارات</span><input type="checkbox" id="sound"></div>
+    <p class="small">الإعدادات دي تجريبية ومش بتغيّر إعدادات الباك إند.</p>
+    <button class="btn" id="backHome">العودة للرئيسية</button>
+  </div>
+</section>
+
+<footer>EVA AI · واجهة تجريبية مستقلة · PORT 5001</footer>
+</main>
+
+<nav aria-label="التنقل">
+  <button class="active" data-page="home"><span>⌂</span>الرئيسية</button>
+  <button data-page="chat"><span>◉</span>المحادثة</button>
+  <button data-page="files"><span>▤</span>الملفات</button>
+  <button data-page="memory"><span>◇</span>الذاكرة</button>
+  <button data-page="settings"><span>⚙</span>الإعدادات</button>
+</nav>
+
+<script>
+const $=id=>document.getElementById(id);
+const pages=['home','chat','files','memory','settings'];
+function showPage(name){
+  if(!pages.includes(name))return;
+  document.body.classList.toggle('chat-mode',name==='chat');
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===name));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
+  window.scrollTo({top:0,behavior:$('motion').checked?'smooth':'auto'});
+}
+document.querySelector('nav').addEventListener('click',e=>{
+  const b=e.target.closest('[data-page]');
+  if(b)showPage(b.dataset.page);
+});
+$('startChat').onclick=()=>{
+  const name=$('username').value.trim();
+  if(!name){$('username').focus();return;}
+  showPage('chat');
+  $('message').focus();
+};
+$('exitChat').onclick=()=>showPage('home');
+$('username').addEventListener('keydown',e=>{if(e.key==='Enter')$('startChat').click();});
+async function sendMessage(){
+  const input=$('message');
+  const text=input.value.trim();
+  if(!text)return;
+
+  const m=document.createElement('div');
+  m.className='msg user';
+  m.textContent=text;
+  $('messages').appendChild(m);
+  input.value='';
+  input.disabled=true;
+  $('send').disabled=true;
+
+  const reply=document.createElement('div');
+  reply.className='msg eva';
+  reply.textContent='إيفا بتفكر...';
+  $('messages').appendChild(reply);
+  $('messages').scrollTop=$('messages').scrollHeight;
+
+  try{
+    const r=await fetch('http://127.0.0.1:5001/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      credentials:'include',
+      body:JSON.stringify({msg:text})
+    });
+    const d=await r.json();
+    if(!r.ok) throw new Error(d.error||'HTTP '+r.status);
+    reply.textContent=d.reply||'إيفا مرجعتش رد.';
+  }catch(e){
+    reply.textContent='حصل خطأ في الاتصال بذكاء إيفا: '+e.message;
+  }finally{
+    input.disabled=false;
+    $('send').disabled=false;
+    input.focus();
+    $('messages').scrollTop=$('messages').scrollHeight;
+  }
+}
+$('send').onclick=sendMessage;
+$('message').addEventListener('keydown',e=>{if(e.key==='Enter')sendMessage();});
+$('clearChat').onclick=()=>{
+  $('messages').innerHTML='<div class="msg eva">بدأنا محادثة جديدة. اتفضل!</div>';
+};
+$('filePicker').addEventListener('change',()=>{
+  $('fileName').textContent=$('filePicker').files.length?'الملف المختار: '+$('filePicker').files[0].name:'لم يتم اختيار ملف.';
+});
+$('saveMemory').onclick=()=>{
+  $('memoryOutput').textContent=$('memoryText').value.trim()||'اكتب ملاحظة الأول.';
+};
+$('backHome').onclick=()=>showPage('home');
+$('motion').addEventListener('change',e=>{
+  document.documentElement.style.scrollBehavior=e.target.checked?'smooth':'auto';
+});
+</script>
+</body>
+</html>

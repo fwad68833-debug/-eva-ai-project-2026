@@ -1,0 +1,12 @@
+.env
+*.db
+*.sqlite
+keys.env
+.eva_secret
+__pycache__/
+*.pyc
+__pycache__/
+.env.*
+keys.env
+.eva_secret
+*.db
